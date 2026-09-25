@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    routes_s2_fixed.rou.xml
+    ========================
+    Kịch bản S2 (Dưới bão hoà – Bất đối xứng) — PHIÊN BẢN SỬA
+    
+    Mục tiêu thiết kế lại:
+    - Phá đối xứng tải nhánh giữa J61 và J0 để bài toán tối ưu tại hai nút có
+      cấu trúc khác nhau, buộc NSGA-II tìm nhiều nghiệm thoả hiệp hơn.
+    - Tạo bất đối xứng hướng rẽ (turning movement asymmetry) để gradient mục
+      tiêu không phẳng trên toàn miền khả thi.
+    - Duy trì: q_total = 2000 xe/h, tỷ lệ EW:NS ≈ 80:20 = 1600:400.
+    
+    Phân bổ sau sửa:
+      Trục chính EW:         700 xe/h
+      Trục chính WE:         700 xe/h   → q_EW = 1400 xe/h
+      Nhánh J61 (NS+rẽ):     310 xe/h   [tải cao, nút upstream]
+      Nhánh J0  (NS+rẽ):     290 xe/h   [tải thấp hơn, nút downstream]
+      
+      Tổng kiểm tra: 1400 + 310 + 290 = 2000 xe/h ✓
+      Tỷ lệ thực: EW=1400, NS/rẽ=600 → 70:30 (điều chỉnh tỷ lệ để tạo gradient rõ hơn)
+      
+      Ghi chú: Giảm trục chính từ 1600→1400 và tăng nhánh từ 400→600
+      để mức độ bão hoà x tại pha NS đủ lớn, tạo trade-off rõ giữa f1 và f2.
+      x_EW ≈ 0.58, x_NS_J61 ≈ 0.62 → gradient phi tuyến bắt đầu kích hoạt.
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+
+    <vType id="car_standard" length="5.0" maxSpeed="15.0" accel="2.6" decel="4.5"
+           sigma="0.5" emissionClass="HBEFA3/PC_G_EU4" color="yellow"/>
+
+    <!-- Các tuyến đường (giữ nguyên) -->
+    <route id="route_main_WE" edges="E30 E0 E2"/>
+    <route id="route_main_EW" edges="-E2 -E0 -E30"/>
+
+    <route id="route_J61_NS"  edges="E34 E35"/>
+    <route id="route_J61_SN"  edges="-E35 -E34"/>
+    <route id="route_J61_WS"  edges="E30 E35"/>
+    <route id="route_J61_SW"  edges="-E35 -E30"/>
+    <route id="route_J61_NE"  edges="E34 E0 E2"/>
+    <route id="route_J61_EN"  edges="-E2 -E0 -E34"/>
+
+    <route id="route_J0_NS"   edges="-E1 E3"/>
+    <route id="route_J0_SN"   edges="-E3 E1"/>
+    <route id="route_J0_WS"   edges="E0 E3"/>
+    <route id="route_J0_SW"   edges="-E3 -E0 -E30"/>
+    <route id="route_J0_EN"   edges="-E2 E1"/>
+    <route id="route_J0_NE"   edges="-E1 E2"/>
+
+    <!-- ================================================================
+         TRỤC CHÍNH: 1400 xe/h (giảm từ 1600 để tạo dư địa cho nhánh)
+         Bất đối xứng hướng: WE > EW để tạo luồng ưu thế một chiều
+         ================================================================ -->
+    <flow id="flow_main_WE" type="car_standard" route="route_main_WE"
+          begin="0" end="3600" vehsPerHour="740"
+          departLane="best" departSpeed="max"/>
+    <flow id="flow_main_EW" type="car_standard" route="route_main_EW"
+          begin="0" end="3600" vehsPerHour="660"
+          departLane="best" departSpeed="max"/>
+    <!-- Tổng trục chính: 740 + 660 = 1400 xe/h -->
+
+    <!-- ================================================================
+         J61 (nút upstream): 310 xe/h — tải NS CAO chủ đích
+         Mục đích: x_NS_J61 cao → pha NS tại J61 là nút thắt cổ chai
+         Tạo áp lực cho biến g1_1 (thời gian xanh EW tại J1)
+         ================================================================ -->
+    <!-- NS thẳng: 80+80=160 xe/h (tăng từ 50+50=100) -->
+    <flow id="flow_J61_NS" type="car_standard" route="route_J61_NS"
+          begin="0" end="3600" vehsPerHour="80" departLane="best"/>
+    <flow id="flow_J61_SN" type="car_standard" route="route_J61_SN"
+          begin="0" end="3600" vehsPerHour="80" departLane="best"/>
+    <!-- Rẽ: bất đối xứng trái/phải (40 vs 15) → turning ratio khác nhau -->
+    <flow id="flow_J61_WS" type="car_standard" route="route_J61_WS"
+          begin="0" end="3600" vehsPerHour="40" departLane="best"/>
+    <flow id="flow_J61_SW" type="car_standard" route="route_J61_SW"
+          begin="0" end="3600" vehsPerHour="15" departLane="best"/>
+    <flow id="flow_J61_NE" type="car_standard" route="route_J61_NE"
+          begin="0" end="3600" vehsPerHour="55" departLane="best"/>
+    <flow id="flow_J61_EN" type="car_standard" route="route_J61_EN"
+          begin="0" end="3600" vehsPerHour="40" departLane="best"/>
+    <!-- Tổng J61: 80+80+40+15+55+40 = 310 xe/h -->
+
+    <!-- ================================================================
+         J0 (nút downstream): 290 xe/h — tải NS THẤP HƠN J61
+         Mục đích: Hai nút có cấu trúc tải khác nhau → biến O2 có ý nghĩa
+         thực sự trong tối ưu hoá (không còn đẳng cấu với J61)
+         ================================================================ -->
+    <!-- NS thẳng: 50+50=100 xe/h (giữ nguyên) -->
+    <flow id="flow_J0_NS" type="car_standard" route="route_J0_NS"
+          begin="0" end="3600" vehsPerHour="50" departLane="best"/>
+    <flow id="flow_J0_SN" type="car_standard" route="route_J0_SN"
+          begin="0" end="3600" vehsPerHour="50" departLane="best"/>
+    <!-- Rẽ: bất đối xứng ngược chiều J61 (15 vs 40) → kiểm tra offset O2 -->
+    <flow id="flow_J0_WS" type="car_standard" route="route_J0_WS"
+          begin="0" end="3600" vehsPerHour="15" departLane="best"/>
+    <flow id="flow_J0_SW" type="car_standard" route="route_J0_SW"
+          begin="0" end="3600" vehsPerHour="40" departLane="best"/>
+    <flow id="flow_J0_EN" type="car_standard" route="route_J0_EN"
+          begin="0" end="3600" vehsPerHour="55" departLane="best"/>
+    <flow id="flow_J0_NE" type="car_standard" route="route_J0_NE"
+          begin="0" end="3600" vehsPerHour="80" departLane="best"/>
+    <!-- Tổng J0: 50+50+15+40+55+80 = 290 xe/h -->
+
+    <!-- ================================================================
+         KIỂM TRA TỔNG: 1400 + 310 + 290 = 2000 xe/h ✓
+         Lưu ý: Mỗi xe trên tuyến quá cảnh (J61_NE, J0_SW, v.v.) 
+         được đếm 1 lần dù đi qua 2 nút — nhất quán với cách đếm cũ.
+         ================================================================ -->
+
+</routes>

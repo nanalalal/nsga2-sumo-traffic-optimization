@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <input>
+        <net-file value="network.net.xml"/>
+        <route-files value="routes.rou.xml"/>
+    </input>
+    <output>
+        <tripinfo-output value="D:\DoAn_NSGA2_VISSIM\sumo_model_s3\output\tripinfo.xml"/>
+        <emission-output value="D:\DoAn_NSGA2_VISSIM\sumo_model_s3\output\emission.xml"/>
+        <summary-output value="D:\DoAn_NSGA2_VISSIM\sumo_model_s3\output\summary.xml"/> 
+    </output>
+    <time>
+        <begin value="0"/>
+        <end value="900"/>
+    </time>
+</configuration>

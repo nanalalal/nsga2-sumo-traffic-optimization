@@ -1,0 +1,26 @@
+# --- Output mo phong SUMO (tu sinh lai duoc bang src/run_nsga2_v2.py, KHONG commit) ---
+sumo_model/output/
+sumo_model_s1/output/
+sumo_model_s2/output/
+sumo_model_s3/output/
+
+# --- Lop service (FastAPI + MCP + Docker) tach thanh repo rieng ---
+service_fastapi_mcp/
+
+# --- Python / moi truong ao ---
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# --- Conda ---
+.conda/
+
+# --- He dieu hanh / IDE ---
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/
