@@ -1,5 +1,6 @@
-# Ứng dụng Thuật toán NSGA-II Giải Bài Toán Điều Khiển Tín Hiệu Giao Thông Phối Hợp (MOIP) Tích Hợp Bộ Mô Phỏng SUMO
-> Đề tài: *Ứng dụng thuật toán NSGA-II giải bài toán Điều khiển tín hiệu giao thông phối hợp (MOIP) tích hợp bộ mô phỏng SUMO*
+# NSGA-II cho Điều khiển Tín hiệu Giao thông Phối hợp (MOIP) tích hợp SUMO
+
+Đồ án tốt nghiệp: ứng dụng thuật toán tối ưu đa mục tiêu NSGA-II giải bài toán điều khiển tín hiệu giao thông phối hợp (Multi-Objective Intersection Planning), đánh giá bằng mô phỏng vi mô SUMO.
 
 > **Repo liên quan:** lớp service triển khai (FastAPI + MCP Server + Docker) bọc quanh đồ án này nằm ở repo riêng — xem [nsga2-fastapi-mcp-service](https://github.com/nanalalal/nsga2-fastapi-mcp-service).
 
@@ -297,7 +298,7 @@ Dùng cách này nếu bạn chỉ có Python cài từ [python.org](https://www
 **Bước 1:** Tạo virtual environment:
 
 ```cmd
-cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO
+cd <đường-dẫn-bạn-clone-repo-vào>
 python -m venv venv
 ```
 
@@ -348,13 +349,13 @@ pip install traci sumolib
 **Cách 1 — Anaconda:**
 ```cmd
 conda activate traffic_nsga2
-cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src
+cd <đường-dẫn-bạn-clone-repo-vào>\src
 python run_nsga2_v2.py --scenario S1 --pop_size 60 --n_gen_max 30
 ```
 
 **Cách 2 — venv:**
 ```cmd
-cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO
+cd <đường-dẫn-bạn-clone-repo-vào>
 venv\Scripts\activate.bat
 cd src
 python run_nsga2_v2.py --scenario S1 --pop_size 60 --n_gen_max 30
@@ -362,7 +363,7 @@ python run_nsga2_v2.py --scenario S1 --pop_size 60 --n_gen_max 30
 
 Hoặc dùng **đường dẫn đầy đủ** (sau khi đã kích hoạt môi trường):
 ```cmd
-python "<PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src\run_nsga2_v2.py" --scenario S1 --pop_size 60 --n_gen_max 30
+python "<đường-dẫn-bạn-clone-repo-vào>\src\run_nsga2_v2.py" --scenario S1 --pop_size 60 --n_gen_max 30
 ```
 
 Ba kịch bản:
@@ -385,7 +386,7 @@ Kết quả lưu vào `results/results_{scenario}_{label}_gen{t}.csv` + biểu �
 ### 4.2. Resume từ checkpoint
 
 ```cmd
-cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src
+cd <đường-dẫn-bạn-clone-repo-vào>\src
 python resume_nsga.py --scenario S3 --csv_old ..\results\results_S3_Gan_bao_hoa_bat_doi_xung_gen30.csv --n_gen_extra 40 --patience 10
 ```
 
@@ -396,7 +397,7 @@ Nhấn `Ctrl+C` một lần để lưu dữ liệu an toàn rồi thoát.
 Không cần SUMO — chỉ cần 3 file CSV trong `results/`:
 
 ```cmd
-cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src
+cd <đường-dẫn-bạn-clone-repo-vào>\src
 python extract_results.py
 python plot_pareto.py
 ```
@@ -408,7 +409,7 @@ python plot_pareto.py
 | Lỗi | Nguyên nhân | Cách sửa |
 |:---|:---|:---|
 | `ModuleNotFoundError: No module named 'pymoo'` | Chưa kích hoạt môi trường | Chạy `conda activate traffic_nsga2` hoặc `venv\Scripts\activate.bat` |
-| `No such file or directory: 'run_nsga2_v2.py'` | Sai thư mục làm việc | `cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src` trước khi chạy |
+| `No such file or directory: 'run_nsga2_v2.py'` | Sai thư mục làm việc | `cd <đường-dẫn-bạn-clone-repo-vào>\src` trước khi chạy |
 | `EnvironmentError: Vui lòng khai báo SUMO_HOME` | Biến môi trường chưa set | Chạy `setx SUMO_HOME "..."` rồi mở lại terminal |
 | `traci.exceptions.FatalTraCIError` | SUMO crash hoặc port bị chiếm | Đóng mọi cửa sổ SUMO đang mở, chạy lại |
 | `ModuleNotFoundError: No module named 'traci'` | traci chưa cài trong môi trường | `pip install traci` hoặc thêm `%SUMO_HOME%\tools` vào `PYTHONPATH` |
