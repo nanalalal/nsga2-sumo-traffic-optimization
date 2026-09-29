@@ -9,16 +9,16 @@ SCENARIOS = {
     "S1": {
         "total_hourly_demand": 2000,
         "label": "Duoi_bao_hoa_doi_xung",
-        "sumo_cfg": r"D:\DoAn_NSGA2_VISSIM\sumo_model_s1\simulation.sumocfg"
+        "sumo_cfg": r"D:\DoAn_NSGA2_SUMO\sumo_model_s1\simulation.sumocfg"
     },
     "S2": {
         "total_hourly_demand": 2000,
         "label": "Duoi_bao_hoa_bat_doi_xung",
-        "sumo_cfg": r"D:\DoAn_NSGA2_VISSIM\sumo_model_s2\simulation.sumocfg"
+        "sumo_cfg": r"D:\DoAn_NSGA2_SUMO\sumo_model_s2\simulation.sumocfg"
     },
     "S3": {
         "total_hourly_demand": 3600,
         "label": "Gan_bao_hoa_bat_doi_xung",
-        "sumo_cfg": r"D:\DoAn_NSGA2_VISSIM\sumo_model_s3\simulation.sumocfg"
+        "sumo_cfg": r"D:\DoAn_NSGA2_SUMO\sumo_model_s3\simulation.sumocfg"
     },
 }

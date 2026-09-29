@@ -49,7 +49,7 @@ Hàm mục tiêu được đánh giá hoàn toàn bằng **mô phỏng hộp đe
 ## 2. Cấu trúc thư mục
 
 ```
-DoAn_NSGA2_VISSIM/
+DoAn_NSGA2_SUMO/
 │
 ├── src/                          # Toàn bộ mã nguồn Python
 │   ├── config.py                 # Tham số kịch bản
@@ -297,7 +297,7 @@ Dùng cách này nếu bạn chỉ có Python cài từ [python.org](https://www
 **Bước 1:** Tạo virtual environment:
 
 ```cmd
-cd D:\DoAn_NSGA2_VISSIM
+cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO
 python -m venv venv
 ```
 
@@ -348,13 +348,13 @@ pip install traci sumolib
 **Cách 1 — Anaconda:**
 ```cmd
 conda activate traffic_nsga2
-cd D:\DoAn_NSGA2_VISSIM\src
+cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src
 python run_nsga2_v2.py --scenario S1 --pop_size 60 --n_gen_max 30
 ```
 
 **Cách 2 — venv:**
 ```cmd
-cd D:\DoAn_NSGA2_VISSIM
+cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO
 venv\Scripts\activate.bat
 cd src
 python run_nsga2_v2.py --scenario S1 --pop_size 60 --n_gen_max 30
@@ -362,7 +362,7 @@ python run_nsga2_v2.py --scenario S1 --pop_size 60 --n_gen_max 30
 
 Hoặc dùng **đường dẫn đầy đủ** (sau khi đã kích hoạt môi trường):
 ```cmd
-python "D:\DoAn_NSGA2_VISSIM\src\run_nsga2_v2.py" --scenario S1 --pop_size 60 --n_gen_max 30
+python "<PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src\run_nsga2_v2.py" --scenario S1 --pop_size 60 --n_gen_max 30
 ```
 
 Ba kịch bản:
@@ -385,7 +385,7 @@ Kết quả lưu vào `results/results_{scenario}_{label}_gen{t}.csv` + biểu �
 ### 4.2. Resume từ checkpoint
 
 ```cmd
-cd D:\DoAn_NSGA2_VISSIM\src
+cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src
 python resume_nsga.py --scenario S3 --csv_old ..\results\results_S3_Gan_bao_hoa_bat_doi_xung_gen30.csv --n_gen_extra 40 --patience 10
 ```
 
@@ -396,7 +396,7 @@ Nhấn `Ctrl+C` một lần để lưu dữ liệu an toàn rồi thoát.
 Không cần SUMO — chỉ cần 3 file CSV trong `results/`:
 
 ```cmd
-cd D:\DoAn_NSGA2_VISSIM\src
+cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src
 python extract_results.py
 python plot_pareto.py
 ```
@@ -408,7 +408,7 @@ python plot_pareto.py
 | Lỗi | Nguyên nhân | Cách sửa |
 |:---|:---|:---|
 | `ModuleNotFoundError: No module named 'pymoo'` | Chưa kích hoạt môi trường | Chạy `conda activate traffic_nsga2` hoặc `venv\Scripts\activate.bat` |
-| `No such file or directory: 'run_nsga2_v2.py'` | Sai thư mục làm việc | `cd D:\DoAn_NSGA2_VISSIM\src` trước khi chạy |
+| `No such file or directory: 'run_nsga2_v2.py'` | Sai thư mục làm việc | `cd <PATH_TO_PROJECT>\DoAn_NSGA2_SUMO\src` trước khi chạy |
 | `EnvironmentError: Vui lòng khai báo SUMO_HOME` | Biến môi trường chưa set | Chạy `setx SUMO_HOME "..."` rồi mở lại terminal |
 | `traci.exceptions.FatalTraCIError` | SUMO crash hoặc port bị chiếm | Đóng mọi cửa sổ SUMO đang mở, chạy lại |
 | `ModuleNotFoundError: No module named 'traci'` | traci chưa cài trong môi trường | `pip install traci` hoặc thêm `%SUMO_HOME%\tools` vào `PYTHONPATH` |

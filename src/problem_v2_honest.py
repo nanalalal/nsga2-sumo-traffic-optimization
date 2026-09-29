@@ -62,14 +62,31 @@ class ProblemV2_HonestObjective(Problem):
         Bỏ qua: index 3 (delay_tripinfo — validation only, có survivorship bias).
     """
 
-    def __init__(self, evaluator):
+    def __init__(self, evaluator, cycle_bounds=(60.0, 120.0), green_bounds=(15.0, 90.0)):
+        """
+        Parameters
+        ----------
+        evaluator : SUMOEvaluatorImproved
+        cycle_bounds : tuple(float, float), optional
+            (min, max) cho chu kỳ đèn chung C [giây]. Mặc định (60, 120) —
+            GIỐNG HỆT bounds gốc, không đổi hành vi nếu không truyền.
+        green_bounds : tuple(float, float), optional
+            (min, max) cho 4 biến thời gian xanh g1_1/g1_2/g2_1/g2_2 [giây].
+            Mặc định (15, 90) — GIỐNG HỆT bounds gốc.
+
+        Ghi chú: bound trên của O2 (độ lệch pha) LUÔN = cycle_max - 1, tính
+        động theo cycle_bounds — không phải tham số độc lập, vì O2 vốn phụ
+        thuộc vào C (Repair Operator xử lý ràng buộc O2 < C).
+        """
+        cycle_min, cycle_max = cycle_bounds
+        green_min, green_max = green_bounds
         # n_var=6, n_obj=2, n_ieq_constr=1 (gridlock constraint)
         super().__init__(
             n_var=6,
             n_obj=2,
             n_ieq_constr=1,
-            xl=np.array([60.0, 15.0, 15.0, 15.0, 15.0,  0.0]),
-            xu=np.array([120.0, 90.0, 90.0, 90.0, 90.0, 119.0]),
+            xl=np.array([cycle_min, green_min, green_min, green_min, green_min, 0.0]),
+            xu=np.array([cycle_max, green_max, green_max, green_max, green_max, cycle_max - 1.0]),
         )
         self.evaluator = evaluator
 
